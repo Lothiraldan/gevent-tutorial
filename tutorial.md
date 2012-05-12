@@ -22,14 +22,14 @@ which are truly parallel.
 
 The core idea of concurrency is that a larger task can be broken
 down into a collection of subtasks whose operation does not
-depend on the other tasks and thus can be run 
-*asynchronously* instead of one at a time 
+depend on the other tasks and thus can be run
+*asynchronously* instead of one at a time
 *synchronously*. A switch between the two
 executions is known as a *context swtich*.
 
 A context switch in gevent done through
 *yielding*. In this case example we have
-two contexts which yield to each other through invoking 
+two contexts which yield to each other through invoking
 ``gevent.sleep(0)``.
 
 [[[cog
@@ -132,7 +132,7 @@ while each task executes.
 
 The important parts of the program are the
 ``gevent.spawn`` which wraps up the given function
-inside of a Greenlet thread. The list of initialized greenlets 
+inside of a Greenlet thread. The list of initialized greenlets
 are stored in the array ``threads`` which is passed to
 the ``gevent.joinall`` function which blocks the current
 program to run all the given greenlets. The execution will step
@@ -272,7 +272,7 @@ def foo(message, n):
 # foo
 thread1 = Greenlet.spawn(foo, "Hello", 1)
 
-# Wrapper for creating and runing a new Greenlet from the named 
+# Wrapper for creating and runing a new Greenlet from the named
 # function foo, with the passd arguments
 thread2 = gevent.spawn(foo, "I live!", 2)
 
@@ -510,7 +510,7 @@ gevent.joinall([
 
 A extension of the Event object is the AsyncResult which
 allows you to send a value along with the wakeup call. This is
-sometimes called a future or a deferred, since it holds a 
+sometimes called a future or a deferred, since it holds a
 reference to a future value that can be set on an arbitrary time
 schedule.
 
@@ -579,10 +579,10 @@ gevent.joinall([
 ]]]
 [[[end]]]
 
-Queues can also block on either ``put`` or ``get`` as the need arises. 
+Queues can also block on either ``put`` or ``get`` as the need arises.
 
 Each of the ``put`` and ``get`` operations has a non-blocking
-counterpart, ``put_nowait`` and 
+counterpart, ``put_nowait`` and
 ``get_nowait`` which will not block, but instead raise
 either ``gevent.queue.Empty`` or
 ``gevent.queue.Full`` in the operation is not possible.
@@ -650,7 +650,7 @@ by the language Erlang. In short the main idea is that you have a
 collection of independent Actors which have an inbox from which
 they receive messages from other Actors. The main loop inside the
 Actor iterates through its messages and takes action according to
-its desired behavior. 
+its desired behavior.
 
 Gevent does not have a primitive Actor type, but we can define
 one very simply using a Queue inside of a subclassed Greenlet.
@@ -717,7 +717,7 @@ gevent.joinall([ping, pong])
 [ZeroMQ](http://www.zeromq.org/) is described by its authors as
 "a socket library that acts as a concurrency framework". It is a
 very powerful messaging layer for building concurrent and
-distributed applications. 
+distributed applications.
 
 ZeroMQ provides a variety of socket primitives, the simplest of
 which being a Request-Response socket pair. A socket has two
@@ -769,8 +769,8 @@ gevent.joinall([publisher, client])
 
 <pre>
 <code class="python">
-# On Unix: Access with ``$ nc 127.0.0.1 5000`` 
-# On Window: Access with ``$ telnet 127.0.0.1 5000`` 
+# On Unix: Access with ``$ nc 127.0.0.1 5000``
+# On Window: Access with ``$ telnet 127.0.0.1 5000``
 
 from gevent.server import StreamServer
 
@@ -838,7 +838,7 @@ def application(environ, start_response):
 WSGIServer(('', 8000), application).serve_forever()
 
 </code>
-</pre> 
+</pre>
 
 Using pywsgi we can however write our handler as a generator and
 yield the result chunk by chunk.
@@ -860,7 +860,7 @@ def application(environ, start_response):
 WSGIServer(('', 8000), application).serve_forever()
 
 </code>
-</pre> 
+</pre>
 
 But regardless, performance on Gevent servers is phenomenal
 compared to other Python servers. libev is a very vetted technology
@@ -869,7 +869,7 @@ and its derivative servers are known to perform well at scale.
 <pre>
 <code class="shell">$ ab -n 10000 -c 100 http://127.0.0.1:8000/
 </code>
-</pre> 
+</pre>
 
 ## Long Polling
 
@@ -1077,5 +1077,5 @@ if __name__ == "__main__":
 
 ## License
 
-This is a collaborative document published under MIT license. Forking 
+This is a collaborative document published under MIT license. Forking
 on <a href="https://github.com/sdiehl/gevent-tutorial">GitHub</a> is encouraged

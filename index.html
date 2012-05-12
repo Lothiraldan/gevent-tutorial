@@ -189,13 +189,13 @@ which are truly parallel.</p>
 <h2 id="synchronous-asynchronous-execution">Synchronous &amp; Asynchronous Execution</h2>
 <p>The core idea of concurrency is that a larger task can be broken
 down into a collection of subtasks whose operation does not
-depend on the other tasks and thus can be run 
-<em>asynchronously</em> instead of one at a time 
+depend on the other tasks and thus can be run
+<em>asynchronously</em> instead of one at a time
 <em>synchronously</em>. A switch between the two
 executions is known as a <em>context swtich</em>.</p>
 <p>A context switch in gevent done through
 <em>yielding</em>. In this case example we have
-two contexts which yield to each other through invoking 
+two contexts which yield to each other through invoking
 <code>gevent.sleep(0)</code>.</p>
 <pre><code class="python">
 import gevent
@@ -313,16 +313,16 @@ Task 7 done
 Task 8 done
 Task 9 done
 Asynchronous:
-Task 3 done
+Task 0 done
+Task 1 done
+Task 8 done
+Task 9 done
+Task 7 done
 Task 5 done
+Task 2 done
+Task 3 done
 Task 4 done
 Task 6 done
-Task 0 done
-Task 2 done
-Task 8 done
-Task 1 done
-Task 7 done
-Task 9 done
 </pre></code></p>
 <p>In the synchronous case all the tasks are run sequentially,
 which results in the main programming <em>blocking</em> (
@@ -330,7 +330,7 @@ i.e. pausing the execution of the main program )
 while each task executes.</p>
 <p>The important parts of the program are the
 <code>gevent.spawn</code> which wraps up the given function
-inside of a Greenlet thread. The list of initialized greenlets 
+inside of a Greenlet thread. The list of initialized greenlets
 are stored in the array <code>threads</code> which is passed to
 the <code>gevent.joinall</code> function which blocks the current
 program to run all the given greenlets. The execution will step
@@ -460,7 +460,7 @@ def foo(message, n):
 # foo
 thread1 = Greenlet.spawn(foo, "Hello", 1)
 
-# Wrapper for creating and runing a new Greenlet from the named 
+# Wrapper for creating and runing a new Greenlet from the named
 # function foo, with the passd arguments
 thread2 = gevent.spawn(foo, "I live!", 2)
 
@@ -708,7 +708,7 @@ gevent.joinall([
 
 <p>A extension of the Event object is the AsyncResult which
 allows you to send a value along with the wakeup call. This is
-sometimes called a future or a deferred, since it holds a 
+sometimes called a future or a deferred, since it holds a
 reference to a future value that can be set on an arbitrary time
 schedule.</p>
 <pre>
@@ -802,9 +802,9 @@ Quitting time!
 Quitting time!
 Quitting time!
 </pre></code></p>
-<p>Queues can also block on either <code>put</code> or <code>get</code> as the need arises. </p>
+<p>Queues can also block on either <code>put</code> or <code>get</code> as the need arises.</p>
 <p>Each of the <code>put</code> and <code>get</code> operations has a non-blocking
-counterpart, <code>put_nowait</code> and 
+counterpart, <code>put_nowait</code> and
 <code>get_nowait</code> which will not block, but instead raise
 either <code>gevent.queue.Empty</code> or
 <code>gevent.queue.Full</code> in the operation is not possible.</p>
@@ -891,7 +891,7 @@ by the language Erlang. In short the main idea is that you have a
 collection of independent Actors which have an inbox from which
 they receive messages from other Actors. The main loop inside the
 Actor iterates through its messages and takes action according to
-its desired behavior. </p>
+its desired behavior.</p>
 <p>Gevent does not have a primitive Actor type, but we can define
 one very simply using a Queue inside of a subclassed Greenlet.</p>
 <pre>
@@ -953,7 +953,7 @@ gevent.joinall([ping, pong])
 <p><a href="http://www.zeromq.org/">ZeroMQ</a> is described by its authors as
 "a socket library that acts as a concurrency framework". It is a
 very powerful messaging layer for building concurrent and
-distributed applications. </p>
+distributed applications.</p>
 <p>ZeroMQ provides a variety of socket primitives, the simplest of
 which being a Request-Response socket pair. A socket has two
 methods of interest <code>send</code> and <code>recv</code>, both of which are
@@ -964,6 +964,7 @@ manner.  You can install gevent-zeromq from PyPi via:  <code>pip install
 gevent-zeromq</code></p>
 <pre><code class="python">
 # Note: Remember to ``pip install pyzmq gevent_zeromq``
+import gevent
 from gevent_zeromq import zmq
 
 # Global Context
@@ -981,7 +982,7 @@ def server():
 
 def client():
     client_socket = context.socket(zmq.REP)
-    client_socket.connect("tcp://*:5000")
+    client_socket.connect("tcp://127.0.0.1:5000")
 
     for request in range(1,10):
 
@@ -990,10 +991,10 @@ def client():
         # Implicit context switch occurs here
         client_socket.send("World")
 
-publisher = gevent.spawn(server),
-client    = gevent.spawn(client),
+publisher = gevent.spawn(server)
+client    = gevent.spawn(client)
 
-gevent.joinall( publisher + client )
+gevent.joinall([publisher, client])
 
 </pre>
 
@@ -1021,7 +1022,7 @@ Switched to Client for  9
 <h2 id="simple-telnet-servers">Simple Telnet Servers</h2>
 <pre>
 <code class="python">
-# On Unix: Access with ``$ nc 127.0.0.1 5000`` 
+# On Unix: Access with ``$ nc 127.0.0.1 5000``
 # On Window: Access with ``$ telnet 127.0.0.1 5000``
 
 from gevent.server import StreamServer
@@ -1313,7 +1314,7 @@ if __name__ == "__main__":
 </pre>
 
 <h2 id="license">License</h2>
-<p>This is a collaborative document published under MIT license. Forking 
+<p>This is a collaborative document published under MIT license. Forking
 on <a href="https://github.com/sdiehl/gevent-tutorial">GitHub</a> is encouraged</p>
 </div>
 </body>
